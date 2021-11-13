@@ -1,4 +1,6 @@
+using BackendHomework.Core.Interfaces;
 using BackendHomework.Infrastructure.Data;
+using BackendHomework.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +26,10 @@ namespace BackendHomework.API
             services.AddMvc();
             services.AddDbContext<BackendHomeworkDbContext>(options => options.UseInMemoryDatabase("BackendHomework"));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<BackendHomeworkDbContext>();
+
+            //Dependencies
+            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+            services.AddTransient<IPlateRepository, PlateRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

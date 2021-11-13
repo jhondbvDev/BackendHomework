@@ -1,8 +1,8 @@
 ﻿namespace BackendHomework.Core.Entities
 {
-    public class Ingredient
+    public class Ingredient : BaseEntity
     {
-        public int Id { get; set; }
+        
         public string Name { get; set; }
 
         public int PlateId { get; set; }
