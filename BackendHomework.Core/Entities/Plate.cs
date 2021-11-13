@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace BackendHomework.Core.Models
+namespace BackendHomework.Core.Entities
 {
     public class Plate
     {

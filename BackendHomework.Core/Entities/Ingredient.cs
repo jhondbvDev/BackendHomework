@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BackendHomework.Core.Models
+﻿namespace BackendHomework.Core.Entities
 {
     public class Ingredient
     {
