@@ -6,7 +6,7 @@ namespace BackendHomework.DAL
 {
     public class BackendHomeworkDbContext : IdentityDbContext<IdentityUser>
     {
-        public BackendHomeworkDbContext(DbContextOptions options) : base(options)
+        public BackendHomeworkDbContext(DbContextOptions<BackendHomeworkDbContext> options) : base(options)
         {
         }
     }
