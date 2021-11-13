@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendHomework.API", "BackendHomework.API\BackendHomework.API.csproj", "{8D648286-E625-4C60-B840-3A0F4DB3AABA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendHomework.Core", "BackendHomework.DAL\BackendHomework.Core.csproj", "{DF12D526-27FB-49D4-930E-2D892BC14CD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendHomework.Core", "BackendHomework.Core\BackendHomework.Core.csproj", "{DF12D526-27FB-49D4-930E-2D892BC14CD5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendHomework.Infrastructure", "BackendHomework.Infrastructure\BackendHomework.Infrastructure.csproj", "{1D6D44C0-CC90-4889-87B8-1B67738670FD}"
 EndProject

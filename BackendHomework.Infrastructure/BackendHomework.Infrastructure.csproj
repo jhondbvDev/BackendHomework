@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BackendHomework.DAL\BackendHomework.Core.csproj" />
+    <ProjectReference Include="..\BackendHomework.Core\BackendHomework.Core.csproj" />
   </ItemGroup>
 
 </Project>
