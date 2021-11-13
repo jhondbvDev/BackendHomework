@@ -9,9 +9,9 @@ namespace BackendHomework.Core.Interfaces
     public interface IPlateService
     {
         Task<Plate> GetPlate(int id);
-        IEnumerable<Plate> GetPlates();
-        IEnumerable<Plate> GetPlatesByUserId(int userId);
-        IEnumerable<Plate> GetPublicPlates();
+         IEnumerable<Plate> GetPlates();
+        Task<IEnumerable<Plate>> GetPlatesByUserId(int userId);
+        Task<IEnumerable<Plate>> GetPublicPlates();
 
         Task InsertPlate(Plate plate);
         Task<bool> UpdatePlate(Plate plate);

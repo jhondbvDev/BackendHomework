@@ -1,4 +1,5 @@
 using BackendHomework.Core.Interfaces;
+using BackendHomework.Core.Services;
 using BackendHomework.Infrastructure.Data;
 using BackendHomework.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using System;
 
 namespace BackendHomework.API
 {
@@ -27,9 +30,16 @@ namespace BackendHomework.API
             services.AddDbContext<BackendHomeworkDbContext>(options => options.UseInMemoryDatabase("BackendHomework"));
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<BackendHomeworkDbContext>();
 
+            //Mapper
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            AddSwagger(services);
+
             //Dependencies
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddTransient<IPlateRepository, PlateRepository>();
+
+            services.AddTransient<IPlateService, PlateService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +63,33 @@ namespace BackendHomework.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+            });
+        }
+
+        private void AddSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                var groupName = "v1";
+
+                options.SwaggerDoc(groupName, new OpenApiInfo
+                {
+                    Title = $"Backend {groupName}",
+                    Version = groupName,
+                    Description = "Backend API",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "BackendHomework Company",
+                        Email = string.Empty,
+                        Url = new Uri("https://Backend.com/"),
+                    }
+                });
             });
         }
     }

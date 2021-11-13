@@ -2,14 +2,16 @@
 
 namespace BackendHomework.API.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("user")]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
-        [Route("index")]
-        public ActionResult Index()
+        [HttpGet]
+        public IActionResult Get()
         {
-            return Ok();
+            
+       
+            return Ok("User Controller works !!");
         }
     }
 }
