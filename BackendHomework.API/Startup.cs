@@ -4,6 +4,7 @@ using BackendHomework.Infrastructure.Data;
 using BackendHomework.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +29,22 @@ namespace BackendHomework.API
         {
             services.AddMvc();
             services.AddDbContext<BackendHomeworkDbContext>(options => options.UseInMemoryDatabase("BackendHomework"));
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<BackendHomeworkDbContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>(options => 
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 10;
+
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<BackendHomeworkDbContext>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.Name = "Identity.Session";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                options.SlidingExpiration = true;
+            });
 
             //Mapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -55,10 +71,9 @@ namespace BackendHomework.API
             }
 
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
