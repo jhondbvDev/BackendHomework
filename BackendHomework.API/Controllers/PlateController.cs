@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using BackendHomework.API.Response;
 using BackendHomework.Core.DTOs;
 using BackendHomework.Core.Entities;
 using BackendHomework.Core.Interfaces;
+using BackendHomework.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -40,7 +40,7 @@ namespace BackendHomework.API.Controllers
         {
             var plates = _plateService.GetPlates();
 
-            return Ok(new ResponseMessage<IEnumerable<PlateDTO>>(_mapper.Map<IEnumerable<PlateDTO>>(plates)));
+            return Ok(new Response<IEnumerable<PlateDTO>>(_mapper.Map<IEnumerable<PlateDTO>>(plates)));
         }
 
         [HttpPost]
@@ -60,7 +60,7 @@ namespace BackendHomework.API.Controllers
 
                     await _plateService.InsertPlate(plate);
 
-                    return Ok(new ResponseMessage<string>("The plate has been created successfully"));
+                    return Ok(new Response<string>("The plate has been created successfully"));
                 }
                 else 
                 {
@@ -69,7 +69,7 @@ namespace BackendHomework.API.Controllers
             }
             catch (Exception ex) 
             {
-                return BadRequest(new ResponseMessage<Exception>(ex));
+                return BadRequest(new Response<Exception>(ex));
             }
         }
     }

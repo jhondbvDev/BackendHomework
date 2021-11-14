@@ -1,7 +1,9 @@
 ﻿using BackendHomework.Core.Entities;
 using BackendHomework.Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +19,11 @@ namespace BackendHomework.Core.Services
         public Task<bool> DeletePlate(Plate plate)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> GetCount()
+        {
+            return await _plateRepository.GetCount();
         }
 
         public Task<Plate> GetPlate(int id)
@@ -35,9 +42,10 @@ namespace BackendHomework.Core.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Plate>> GetPublicPlates()
+        public async Task<IEnumerable<Plate>> GetPublicPlates(int pageNumber,int pageSize)
         {
-            throw new NotImplementedException();
+            var plates = _plateRepository.GetPublic(pageNumber, pageSize);
+            return await plates.ToListAsync();
         }
 
         public async Task InsertPlate(Plate plate)

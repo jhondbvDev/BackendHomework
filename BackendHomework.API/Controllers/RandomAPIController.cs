@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using BackendHomework.API.Response;
-using Microsoft.AspNetCore.Http;
+using BackendHomework.Infrastructure.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -30,11 +29,11 @@ namespace BackendHomework.API.Controllers
                         string message =  response.Content.ReadAsStringAsync().Result;
 
                         ResponseRandomAPI responseRandom = JsonConvert.DeserializeObject<List<ResponseRandomAPI>>(message).First();
-                        return Ok(new ResponseMessage<Object>(new { RandomNumber=responseRandom.Random }));
+                        return Ok(new Response<Object>(new { RandomNumber=responseRandom.Random }));
                     }
                     else
                     {
-                        return BadRequest(new ResponseMessage<string>("The service is temporaly out of services, try later."));
+                        return BadRequest(new Response<string>("The service is temporaly out of services, try later."));
                     }
 
                   
@@ -42,7 +41,7 @@ namespace BackendHomework.API.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ResponseMessage<Exception>(ex));
+                return BadRequest(new Response<Exception>(ex));
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using BackendHomework.Core.Entities;
 using BackendHomework.Core.Interfaces;
 using BackendHomework.Infrastructure.Data;
+using BackendHomework.Infrastructure.Pagination;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace BackendHomework.Infrastructure.Repositories
             _entities = context.Set<T>();
         }
 
+        
         public IEnumerable<T> GetAll()
         {
             return _entities.AsEnumerable<T>();
@@ -49,6 +51,10 @@ namespace BackendHomework.Infrastructure.Repositories
             return rows > 0;
         }
 
+        public async Task<int> GetCount()
+        {
+            return await _entities.CountAsync();
+        }
 
     }
 }
