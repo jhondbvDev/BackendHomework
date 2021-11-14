@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using AutoMapper; 
 using BackendHomework.Core.DTOs;
 using BackendHomework.Core.Entities;
 using BackendHomework.Core.Interfaces;
+using BackendHomework.Infrastructure.Helpers;
+using BackendHomework.Infrastructure.Pagination;
 using BackendHomework.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -23,11 +25,13 @@ namespace BackendHomework.API.Controllers
         private readonly IPlateService _plateService;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
-        public PlateController(IPlateService plateService , IMapper mapper, UserManager<User> userManager)
+        private readonly IUriService _uriService;
+        public PlateController(IPlateService plateService , IMapper mapper, UserManager<User> userManager, IUriService uriService)
         {
             _plateService = plateService;
             _mapper = mapper;
             _userManager = userManager;
+            _uriService = uriService;
         }
 
         /// <summary>
@@ -36,11 +40,15 @@ namespace BackendHomework.API.Controllers
         /// <returns>A public list of plates </returns>
         [HttpGet]
         [Route("getPlates")]
-        public IActionResult GetPlates()
+        public async Task<IActionResult> GetPlates([FromQuery] PaginationFilter filter)
         {
-            var plates = _plateService.GetPlates();
-
-            return Ok(new Response<IEnumerable<PlateDTO>>(_mapper.Map<IEnumerable<PlateDTO>>(plates)));
+            var route = Request.Path.Value;
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            var plates = await _plateService.GetPublicPlates(validFilter);
+            var count = await _plateService.GetCount();
+            var platesDTO = _mapper.Map<List<PlateDTO>>(plates);
+            var pagedReponse = PaginationHelper.CreatePagedReponse<PlateDTO>(platesDTO, validFilter, count, _uriService, route);
+            return Ok(pagedReponse);
         }
 
         [HttpPost]
@@ -49,10 +57,11 @@ namespace BackendHomework.API.Controllers
         {
             try
             {
+                //Getting values from jwt to link plate to the current user 
                 var loggedUserId = JsonConvert.DeserializeObject<UserClaimDTO>(User.Claims.Where(c => c.Type == "UserData").FirstOrDefault().Value).Id;
                 var loggedUser = await _userManager.FindByIdAsync(loggedUserId);
 
-                if(loggedUser != null) 
+                if (loggedUser != null)
                 {
                     var plate = _mapper.Map<Plate>(dto);
                     plate.Id = Guid.NewGuid();
@@ -62,7 +71,7 @@ namespace BackendHomework.API.Controllers
 
                     return Ok(new Response<string>("The plate has been created successfully"));
                 }
-                else 
+                else
                 {
                     return BadRequest();
                 }

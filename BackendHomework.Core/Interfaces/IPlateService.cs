@@ -12,7 +12,7 @@ namespace BackendHomework.Core.Interfaces
         Task<Plate> GetPlate(int id);
          IEnumerable<Plate> GetPlates();
         Task<IEnumerable<Plate>> GetPlatesByUserId(int userId);
-        Task<IEnumerable<Plate>> GetPublicPlates(int pageNumber,int pageSize);
+        Task<IEnumerable<Plate>> GetPublicPlates(IPaginationFilter filter);
 
         Task InsertPlate(Plate plate);
         Task<bool> UpdatePlate(Plate plate);

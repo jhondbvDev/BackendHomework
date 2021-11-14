@@ -1,10 +1,10 @@
-﻿using BackendHomework.Infrastructure.Responses;
+﻿ 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BackendHomework.Infrastructure.Pagination
+namespace BackendHomework.Infrastructure.Responses
 {
     public class PagedResponse<T> : Response<T>
     {

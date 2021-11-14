@@ -42,11 +42,12 @@ namespace BackendHomework.Core.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Plate>> GetPublicPlates(int pageNumber,int pageSize)
+        public async Task<IEnumerable<Plate>> GetPublicPlates(IPaginationFilter filter)
         {
-            var plates = _plateRepository.GetPublic(pageNumber, pageSize);
+            var plates = _plateRepository.GetPublic(filter.PageNumber, filter.PageSize);
             return await plates.ToListAsync();
         }
+
 
         public async Task InsertPlate(Plate plate)
         {

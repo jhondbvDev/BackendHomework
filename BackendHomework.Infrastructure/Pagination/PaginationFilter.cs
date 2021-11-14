@@ -1,10 +1,11 @@
-﻿using System;
+﻿using BackendHomework.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BackendHomework.Infrastructure.Pagination
 {
-    public class PaginationFilter
+    public class PaginationFilter:IPaginationFilter
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
