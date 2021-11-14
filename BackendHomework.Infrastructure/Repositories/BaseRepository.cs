@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BackendHomework.Infrastructure.Repositories
@@ -25,7 +24,7 @@ namespace BackendHomework.Infrastructure.Repositories
             return _entities.AsEnumerable<T>();
         }
 
-        public async Task<T> GetById(int id)
+        public async Task<T> GetById(Guid id)
         {
             return await _entities.FirstOrDefaultAsync(x => x.Id == id);
         }
@@ -35,7 +34,7 @@ namespace BackendHomework.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete(Guid id)
         {
             var entity = await GetById(id);
             _entities.Remove(entity);

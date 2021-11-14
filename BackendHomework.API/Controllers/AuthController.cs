@@ -1,6 +1,7 @@
 ﻿ 
 using BackendHomework.API.Response;
 using BackendHomework.Core.DTOs;
+using BackendHomework.Core.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -24,13 +25,13 @@ namespace BackendHomework.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private SignInManager<IdentityUser> _signInManager;
-        private UserManager<IdentityUser> _userManager;
+        private SignInManager<User> _signInManager;
+        private UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
 
         private const string emailRegex = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,})+)$";
 
-        public AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IConfiguration configuration)
+        public AuthController(SignInManager<User> signInManager, UserManager<User> userManager, IConfiguration configuration)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -53,7 +54,7 @@ namespace BackendHomework.API.Controllers
                     return BadRequest(new ResponseMessage<string>("The password must contain at least one of these non-alphanumeric characters: !, @, #, ? or ]"));
                 }
 
-                var user = new IdentityUser
+                var user = new User
                 {
                     UserName = dto.Email,
                     Email = dto.Email
@@ -91,7 +92,7 @@ namespace BackendHomework.API.Controllers
                     if (result.Succeeded)
                     {
 
-                        var token = generateToken(user);
+                        var token = GenerateToken(user);
                         return Ok(new ResponseMessage<string>(token));
                     }
                     else
@@ -120,7 +121,7 @@ namespace BackendHomework.API.Controllers
             return password.Contains('!') || password.Contains('@') || password.Contains('#') || password.Contains('?') || password.Contains(']');
         }
 
-        private string generateToken(IdentityUser user)
+        private string GenerateToken(User user)
         {
             //header
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:SecretKey"]));
@@ -129,20 +130,14 @@ namespace BackendHomework.API.Controllers
 
             var userData = new UserClaimDTO
             {
-                 
                 Id = user.Id,
                 Email = user.Email
-
-
             };
 
             //claims 
             var claims = new[]
             {
-
                 new Claim("UserData",JsonSerializer.Serialize(userData)),
-
-
             };
 
             var payload = new JwtPayload

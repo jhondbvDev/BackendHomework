@@ -26,7 +26,7 @@ namespace BackendHomework.Core.Services
 
         public  IEnumerable<Plate> GetPlates()
         {
-            var plates =   _plateRepository.GetAll() ;
+            var plates = _plateRepository.GetAll();
             return plates;
         }
 
@@ -40,16 +40,14 @@ namespace BackendHomework.Core.Services
             throw new NotImplementedException();
         }
 
-        public Task InsertPlate(Plate plate)
+        public async Task InsertPlate(Plate plate)
         {
-            throw new NotImplementedException();
+            await _plateRepository.Add(plate);
         }
 
         public Task<bool> UpdatePlate(Plate plate)
         {
             throw new NotImplementedException();
         }
-
-
     }
 }
