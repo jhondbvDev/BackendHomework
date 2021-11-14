@@ -10,7 +10,7 @@ namespace BackendHomework.Core.Interfaces
         IEnumerable<T> GetAll();
         Task<T> GetById(Guid id);
 
-
+        Task<int> GetCount();
         Task Add(T entity);
         Task<bool> Update(T entity);
         Task<bool> Delete(Guid id);

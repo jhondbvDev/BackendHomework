@@ -1,4 +1,4 @@
-﻿using BackendHomework.API.Response;
+﻿using BackendHomework.Infrastructure.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -20,26 +20,24 @@ namespace BackendHomework.API.Controllers
         {
             try
             {
-                using (HttpClient client = new HttpClient())
+                using HttpClient client = new HttpClient();
+                HttpResponseMessage response = await client.GetAsync("https://csrng.net/csrng/csrng.php?min=0&max=1000");
+
+                if (response.IsSuccessStatusCode)
                 {
-                    HttpResponseMessage response = await client.GetAsync("https://csrng.net/csrng/csrng.php?min=0&max=1000");
+                    string message = response.Content.ReadAsStringAsync().Result;
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        string message =  response.Content.ReadAsStringAsync().Result;
-
-                        ResponseRandomAPI responseRandom = JsonConvert.DeserializeObject<List<ResponseRandomAPI>>(message).First();
-                        return Ok(new ResponseMessage<Object>(new { RandomNumber=responseRandom.Random }));
-                    }
-                    else
-                    {
-                        return BadRequest(new ResponseMessage<string>("The service is temporarily unavailable, try later."));
-                    }
+                    ResponseRandomAPI responseRandom = JsonConvert.DeserializeObject<List<ResponseRandomAPI>>(message).First();
+                    return Ok(new Response<Object>(new { RandomNumber = responseRandom.Random }));
+                }
+                else
+                {
+                    return BadRequest(new Response<string>("The service is temporarily unavailable, try later."));
                 }
             }
             catch (Exception ex)
             {
-                return BadRequest(new ResponseMessage<Exception>(ex));
+                return BadRequest(new Response<Exception>(ex));
             }
         }
     }

@@ -1,8 +1,10 @@
-﻿using AutoMapper;
-using BackendHomework.API.Response;
+﻿using AutoMapper; 
 using BackendHomework.Core.DTOs;
 using BackendHomework.Core.Entities;
 using BackendHomework.Core.Interfaces;
+using BackendHomework.Infrastructure.Helpers;
+using BackendHomework.Infrastructure.Pagination;
+using BackendHomework.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +25,13 @@ namespace BackendHomework.API.Controllers
         private readonly IPlateService _plateService;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
-        public PlateController(IPlateService plateService , IMapper mapper, UserManager<User> userManager)
+        private readonly IUriService _uriService;
+        public PlateController(IPlateService plateService , IMapper mapper, UserManager<User> userManager, IUriService uriService)
         {
             _plateService = plateService;
             _mapper = mapper;
             _userManager = userManager;
+            _uriService = uriService;
         }
 
         /// <summary>
@@ -37,21 +41,26 @@ namespace BackendHomework.API.Controllers
         /// 
         [HttpGet]
         [Route("getPublicPlates")]
-        public IActionResult GetPublicPlates()
+        public async Task<IActionResult> GetPublicPlates([FromQuery] PaginationFilter filter)
         {
-            var plates = _plateService.GetPublicPlates();
-
-            return Ok(new ResponseMessage<IEnumerable<PlateDTO>>(_mapper.Map<IEnumerable<PlateDTO>>(plates)));
+            var route = Request.Path.Value;
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            var plates = await _plateService.GetPublicPlates(validFilter);
+            var count = await _plateService.GetPublicCount();
+            var platesDTO = _mapper.Map<List<PlateDTO>>(plates);
+            var pagedReponse = PaginationHelper.CreatePagedReponse<PlateDTO>(platesDTO, validFilter, count, _uriService, route);
+            return Ok(pagedReponse);
         }
 
         [HttpGet]
-        [Route("getUserAndPublicPlates")]
-        public IActionResult GetUserAndPublicPlates()
+        [Route("getUserPlates")]
+        public IActionResult GetUserPlates()
         {
+            
             var loggedUserId = JsonConvert.DeserializeObject<UserClaimDTO>(User.Claims.Where(c => c.Type == "UserData").FirstOrDefault().Value).Id;
             var plates = _plateService.GetPlatesByUserId(loggedUserId);
 
-            return Ok(new ResponseMessage<IEnumerable<PlateDTO>>(_mapper.Map<IEnumerable<PlateDTO>>(plates)));
+            return Ok(new Response<IEnumerable<PlateDTO>>(_mapper.Map<IEnumerable<PlateDTO>>(plates)));
         }
 
         [HttpPost]
@@ -60,27 +69,28 @@ namespace BackendHomework.API.Controllers
         {
             try
             {
+                //Getting values from jwt to link plate to the current user 
                 var loggedUserId = JsonConvert.DeserializeObject<UserClaimDTO>(User.Claims.Where(c => c.Type == "UserData").FirstOrDefault().Value).Id;
                 var loggedUser = await _userManager.FindByIdAsync(loggedUserId);
 
-                if(loggedUser != null) 
+                if (loggedUser != null)
                 {
                     var plate = _mapper.Map<Plate>(dto);
                     plate.Id = Guid.NewGuid();
                     plate.User = loggedUser;
-
+                    plate.UserId = loggedUser.Id;
                     await _plateService.InsertPlate(plate);
 
-                    return Ok(new ResponseMessage<string>("The plate has been created successfully"));
+                    return Ok(new Response<string>("The plate has been created successfully"));
                 }
-                else 
+                else
                 {
                     return BadRequest();
                 }
             }
             catch (Exception ex) 
             {
-                return BadRequest(new ResponseMessage<Exception>(ex));
+                return BadRequest(new Response<Exception>(ex));
             }
         }
     }

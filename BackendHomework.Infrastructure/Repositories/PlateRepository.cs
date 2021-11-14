@@ -1,8 +1,13 @@
 ﻿using BackendHomework.Core.Entities;
 using BackendHomework.Core.Interfaces;
 using BackendHomework.Infrastructure.Data;
+using BackendHomework.Infrastructure.Pagination;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BackendHomework.Infrastructure.Repositories
 {
@@ -14,14 +19,29 @@ namespace BackendHomework.Infrastructure.Repositories
 
         }
 
-        public IEnumerable<Plate> GetPlatesByUserId(string userId) 
+        public IQueryable<Plate> GetPlatesByUserId(string userId) 
         {
-            return _entities.Where(e => e.User == null || e.User.Id == userId).AsEnumerable();
+            return _entities.Where(e => e.User.Id == userId);
         }
 
-        public IEnumerable<Plate> GetPublicPlates()
+        public async Task<int> GetPrivateCount(string userId)
         {
-            return _entities.AsEnumerable();
+            return await _entities.Where(p=>p.UserId==userId).CountAsync();
+        }
+
+        public  IQueryable<Plate> GetPublic(int pageNumber, int pageSize)
+        {
+            var pageFilter = new PaginationFilter(pageNumber, pageSize);
+            var plates =  _entities
+                .Where(p=>string.IsNullOrEmpty(p.UserId))
+                .Skip((pageFilter.PageNumber - 1) * pageFilter.PageSize)
+                .Take(pageFilter.PageSize).AsQueryable<Plate>();
+            return plates;
+        }
+
+        public async Task<int> GetPublicCount()
+        {
+            return await _entities.Where(p => string.IsNullOrEmpty(p.UserId)).CountAsync();
         }
     }
 }
