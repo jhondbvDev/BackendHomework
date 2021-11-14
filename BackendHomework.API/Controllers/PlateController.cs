@@ -28,6 +28,10 @@ namespace BackendHomework.API.Controllers
 
         }
 
+        /// <summary>
+        /// Get plates public 
+        /// </summary>
+        /// <returns>A public list of plates </returns>
         [HttpGet]
         public IActionResult Get()
         {
