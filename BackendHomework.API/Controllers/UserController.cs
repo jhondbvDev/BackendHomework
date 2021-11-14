@@ -1,10 +1,13 @@
 ﻿using BackendHomework.API.Response;
 using BackendHomework.Core.DTOs;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -78,6 +81,19 @@ namespace BackendHomework.API.Controllers
 
                     if (result.Succeeded)
                     {
+                        var claims = new List<Claim>
+                            {
+                                new Claim(ClaimTypes.Email, dto.Email),
+               
+                            };
+
+                        var claimsIdentity = new ClaimsIdentity(
+                            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            new ClaimsPrincipal(claimsIdentity));
+
                         return Ok(new ResponseMessage<string>("Login successful"));
                     }
                     else

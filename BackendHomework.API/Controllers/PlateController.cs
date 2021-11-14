@@ -6,13 +6,16 @@ using AutoMapper;
 using BackendHomework.API.Response;
 using BackendHomework.Core.DTOs;
 using BackendHomework.Core.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackendHomework.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController] 
+    [ApiController]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class PlateController : ControllerBase
     {
 

@@ -2,6 +2,7 @@ using BackendHomework.Core.Interfaces;
 using BackendHomework.Core.Services;
 using BackendHomework.Infrastructure.Data;
 using BackendHomework.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,7 +30,7 @@ namespace BackendHomework.API
         {
             services.AddMvc();
             services.AddDbContext<BackendHomeworkDbContext>(options => options.UseInMemoryDatabase("BackendHomework"));
-            services.AddIdentity<IdentityUser, IdentityRole>(options => 
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 10;
@@ -38,24 +39,30 @@ namespace BackendHomework.API
             })
             .AddEntityFrameworkStores<BackendHomeworkDbContext>();
 
-            services.ConfigureApplicationCookie(options =>
+            //services.ConfigureApplicationCookie(options =>
+            //{
+            //    options.Cookie.HttpOnly = true;
+            //    options.Cookie.Name = "Identity.Session";
+            //    options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+            //    options.SlidingExpiration = true;
+            //});
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
-                options.Cookie.HttpOnly = true;
-                options.Cookie.Name = "Identity.Session";
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
                 options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromSeconds(10);
             });
+
 
             //Mapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             AddSwagger(services);
 
-            //Dependencies
-            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-            services.AddTransient<IPlateRepository, PlateRepository>();
+            AddRepositories(services);
+            AddServices(services);
 
-            services.AddTransient<IPlateService, PlateService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -106,6 +113,18 @@ namespace BackendHomework.API
                     }
                 });
             });
+        }
+
+        private void AddRepositories(IServiceCollection services)
+        {
+            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+            services.AddTransient<IPlateRepository, PlateRepository>();
+        }
+
+        private void AddServices(IServiceCollection services)
+        {
+            services.AddTransient<IPlateService, PlateService>();
+
         }
     }
 }
