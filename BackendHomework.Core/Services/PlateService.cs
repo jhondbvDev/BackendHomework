@@ -37,9 +37,26 @@ namespace BackendHomework.Core.Services
             return plates;
         }
 
-        public Task<IEnumerable<Plate>> GetPlatesByUserId(int userId)
+        public Task<IEnumerable<Plate>> GetPlatesByUserId(string userId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> GetPrivateCount(string userId)
+        {
+            var count = _plateRepository.GetPrivateCount(userId);
+            return await count;
+        }
+
+        public Task<int> GetPrivateCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<int> GetPublicCount()
+        {
+            var count = _plateRepository.GetPublicCount();
+            return await count;
         }
 
         public async Task<IEnumerable<Plate>> GetPublicPlates(IPaginationFilter filter)

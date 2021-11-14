@@ -24,13 +24,24 @@ namespace BackendHomework.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<int> GetPrivateCount(string userId)
+        {
+            return await _entities.Where(p=>p.UserId==userId).CountAsync();
+        }
 
         public  IQueryable<Plate> GetPublic(int pageNumber, int pageSize)
         {
             var pageFilter = new PaginationFilter(pageNumber, pageSize);
-            var plates =  _entities.Skip((pageFilter.PageNumber - 1) * pageFilter.PageSize)
-                                    .Take(pageFilter.PageSize).AsQueryable<Plate>();
+            var plates =  _entities
+                .Where(p=>string.IsNullOrEmpty(p.UserId))
+                .Skip((pageFilter.PageNumber - 1) * pageFilter.PageSize)
+                .Take(pageFilter.PageSize).AsQueryable<Plate>();
             return plates;
+        }
+
+        public async Task<int> GetPublicCount()
+        {
+            return await _entities.Where(p => string.IsNullOrEmpty(p.UserId)).CountAsync();
         }
     }
 }

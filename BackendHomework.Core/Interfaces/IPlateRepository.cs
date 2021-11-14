@@ -11,5 +11,9 @@ namespace BackendHomework.Core.Interfaces
     {
         Task<IEnumerable<Plate>> GetByUser(int userId);
         IQueryable<Plate> GetPublic(int pageNumber,int pageSize);
+
+        Task<int> GetPublicCount();
+        Task<int> GetPrivateCount(string userId);
+
     }
 }

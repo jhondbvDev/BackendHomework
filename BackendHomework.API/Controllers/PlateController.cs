@@ -45,7 +45,7 @@ namespace BackendHomework.API.Controllers
             var route = Request.Path.Value;
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
             var plates = await _plateService.GetPublicPlates(validFilter);
-            var count = await _plateService.GetCount();
+            var count = await _plateService.GetPublicCount();
             var platesDTO = _mapper.Map<List<PlateDTO>>(plates);
             var pagedReponse = PaginationHelper.CreatePagedReponse<PlateDTO>(platesDTO, validFilter, count, _uriService, route);
             return Ok(pagedReponse);
@@ -66,7 +66,7 @@ namespace BackendHomework.API.Controllers
                     var plate = _mapper.Map<Plate>(dto);
                     plate.Id = Guid.NewGuid();
                     plate.User = loggedUser;
-
+                    plate.UserId = loggedUser.Id;
                     await _plateService.InsertPlate(plate);
 
                     return Ok(new Response<string>("The plate has been created successfully"));
