@@ -24,20 +24,14 @@ namespace BackendHomework.Core.Services
             throw new NotImplementedException();
         }
 
-        public  IEnumerable<Plate> GetPlates()
+        public IEnumerable<Plate> GetPlatesByUserId(string userId)
         {
-            var plates = _plateRepository.GetAll();
-            return plates;
+            return _plateRepository.GetPlatesByUserId(userId);
         }
 
-        public Task<IEnumerable<Plate>> GetPlatesByUserId(int userId)
+        public IEnumerable<Plate> GetPublicPlates()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Plate>> GetPublicPlates()
-        {
-            throw new NotImplementedException();
+            return _plateRepository.GetPublicPlates();
         }
 
         public async Task InsertPlate(Plate plate)

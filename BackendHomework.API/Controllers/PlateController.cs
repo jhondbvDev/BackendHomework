@@ -31,14 +31,25 @@ namespace BackendHomework.API.Controllers
         }
 
         /// <summary>
-        /// Get plates public 
+        /// Get public plates  
         /// </summary>
         /// <returns>A public list of plates </returns>
+        /// 
         [HttpGet]
-        [Route("getPlates")]
-        public IActionResult GetPlates()
+        [Route("getPublicPlates")]
+        public IActionResult GetPublicPlates()
         {
-            var plates = _plateService.GetPlates();
+            var plates = _plateService.GetPublicPlates();
+
+            return Ok(new ResponseMessage<IEnumerable<PlateDTO>>(_mapper.Map<IEnumerable<PlateDTO>>(plates)));
+        }
+
+        [HttpGet]
+        [Route("getUserAndPublicPlates")]
+        public IActionResult GetUserAndPublicPlates()
+        {
+            var loggedUserId = JsonConvert.DeserializeObject<UserClaimDTO>(User.Claims.Where(c => c.Type == "UserData").FirstOrDefault().Value).Id;
+            var plates = _plateService.GetPlatesByUserId(loggedUserId);
 
             return Ok(new ResponseMessage<IEnumerable<PlateDTO>>(_mapper.Map<IEnumerable<PlateDTO>>(plates)));
         }

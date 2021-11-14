@@ -1,12 +1,11 @@
-﻿using System;
+﻿using BackendHomework.API.Response;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using BackendHomework.API.Response;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace BackendHomework.API.Controllers
 {
@@ -34,10 +33,8 @@ namespace BackendHomework.API.Controllers
                     }
                     else
                     {
-                        return BadRequest(new ResponseMessage<string>("The service is temporaly out of services, try later."));
+                        return BadRequest(new ResponseMessage<string>("The service is temporarily unavailable, try later."));
                     }
-
-                  
                 }
             }
             catch (Exception ex)

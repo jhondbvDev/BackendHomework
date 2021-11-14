@@ -1,10 +1,8 @@
 ﻿using BackendHomework.Core.Entities;
 using BackendHomework.Core.Interfaces;
 using BackendHomework.Infrastructure.Data;
-using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace BackendHomework.Infrastructure.Repositories
 {
@@ -16,15 +14,14 @@ namespace BackendHomework.Infrastructure.Repositories
 
         }
 
-        public Task<IEnumerable<Plate>> GetByUser(int userId)
+        public IEnumerable<Plate> GetPlatesByUserId(string userId) 
         {
-            throw new NotImplementedException();
+            return _entities.Where(e => e.User == null || e.User.Id == userId).AsEnumerable();
         }
 
-
-        public Task<IEnumerable<Plate>> GetPublic()
+        public IEnumerable<Plate> GetPublicPlates()
         {
-            throw new NotImplementedException();
+            return _entities.AsEnumerable();
         }
     }
 }
