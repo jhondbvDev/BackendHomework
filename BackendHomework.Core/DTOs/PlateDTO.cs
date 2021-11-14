@@ -2,13 +2,9 @@
 
 namespace BackendHomework.Core.DTOs
 {
-    public class PlateDTO
+    public class PlateDTO : CreatePlateDTO
     {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-        [JsonProperty("description")]
-        public string Description { get; set; }
-        [JsonProperty("price")]
-        public decimal Price { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
     }
 }

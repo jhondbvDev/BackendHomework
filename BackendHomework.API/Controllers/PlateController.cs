@@ -74,7 +74,7 @@ namespace BackendHomework.API.Controllers
 
         [HttpPost]
         [Route("createPlate")]
-        public async Task<IActionResult> CreatePlate(PlateDTO dto) 
+        public async Task<IActionResult> CreatePlate(CreatePlateDTO dto) 
         {
             try
             {
@@ -84,20 +84,145 @@ namespace BackendHomework.API.Controllers
 
                 if (loggedUser != null)
                 {
-                    var plate = _mapper.Map<Plate>(dto);
-                    plate.Id = Guid.NewGuid();
-                    plate.User = loggedUser;
-                    plate.UserId = loggedUser.Id;
+                    var plate = new Plate 
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = dto.Name,
+                        Description = dto.Description,
+                        Price = dto.Price,
+                        Type = dto.Type,
+                        User = loggedUser,
+                        UserId = loggedUser.Id
+                    };
+
                     await _plateService.InsertPlate(plate);
 
                     return Ok(new Response<string>("The plate has been created successfully"));
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest(new Response<string>("There is no user actually logged into the server, please try again"));
                 }
             }
             catch (Exception ex) 
+            {
+                return BadRequest(new Response<Exception>(ex));
+            }
+        }
+
+        [HttpPut]
+        [Route("editPlatePrice")]
+        public async Task<IActionResult> EditPlatePrice(EditPlateDTO dto)
+        {
+            try
+            {
+                //Getting values from jwt to link plate to the current user 
+                var loggedUserId = JsonConvert.DeserializeObject<UserClaimDTO>(User.Claims.Where(c => c.Type == "UserData").FirstOrDefault().Value).Id;
+
+                if (loggedUserId != null)
+                {
+                    var plate = await _plateService.GetPlate(dto.PlateId);
+
+                    if(plate != null) 
+                    {
+                        if (plate.UserId == loggedUserId)
+                        {
+                            plate.Price = dto.Price;
+                            await _plateService.UpdatePlate(plate);
+
+                            return Ok(new Response<string>("The plate price has been update successfully"));
+                        }
+                        else 
+                        {
+                            return BadRequest(new Response<string>("The plate you are trying to edit does not belong to you, please try with another plate"));
+                        }
+                    }
+                    else 
+                    {
+                        return BadRequest(new Response<string>("The plate you are trying to edit does not exist, please try with another plate"));
+                    }
+                }
+                else
+                {
+                    return BadRequest(new Response<string>("There is no user actually logged into the server, please try again"));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response<Exception>(ex));
+            }
+        }
+
+        [HttpDelete]
+        [Route("deletePlate")]
+        public async Task<IActionResult> DeletePlate(DeletePlateDTO dto)
+        {
+            try
+            {
+                //Getting values from jwt to link plate to the current user 
+                var loggedUserId = JsonConvert.DeserializeObject<UserClaimDTO>(User.Claims.Where(c => c.Type == "UserData").FirstOrDefault().Value).Id;
+
+                if (loggedUserId != null)
+                {
+                    var plate = await _plateService.GetPlate(dto.PlateId);
+
+                    if (plate != null)
+                    {
+                        if (plate.UserId == loggedUserId)
+                        {
+                            await _plateService.DeletePlate(plate);
+
+                            return Ok(new Response<string>("The plate has been deleted successfully"));
+                        }
+                        else
+                        {
+                            return BadRequest(new Response<string>("The plate you are trying to delete does not belong to you, please try with another plate"));
+                        }
+                    }
+                    else
+                    {
+                        return BadRequest(new Response<string>("The plate you are trying to delete does not exist, please try with another plate"));
+                    }
+                }
+                else
+                {
+                    return BadRequest(new Response<string>("There is no user actually logged into the server, please try again"));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response<Exception>(ex));
+            }
+        }
+
+        [HttpDelete]
+        [Route("deleteAllUserPlates")]
+        public async Task<IActionResult> DeleteAllUserPlates()
+        {
+            try
+            {
+                //Getting values from jwt to link plate to the current user 
+                var loggedUserId = JsonConvert.DeserializeObject<UserClaimDTO>(User.Claims.Where(c => c.Type == "UserData").FirstOrDefault().Value).Id;
+
+                if (loggedUserId != null)
+                {
+                    var sucessfullDelete = await _plateService.DeleteAllUserPlates(loggedUserId);
+
+                    if (sucessfullDelete) 
+                    {
+                        return Ok(new Response<string>("All user plates have been deleted successfully"));
+                    }
+                    else 
+                    {
+                        return Ok(new Response<string>("There were no plates to remove this time"));
+                    }
+                }
+                else
+                {
+                    return BadRequest(new Response<string>("There is no user actually logged into the server, please try again"));
+                }
+            }
+            catch (Exception ex)
             {
                 return BadRequest(new Response<Exception>(ex));
             }

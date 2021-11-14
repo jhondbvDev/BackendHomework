@@ -10,5 +10,6 @@ namespace BackendHomework.Core.Interfaces
         Task<int> GetPublicCount();
         Task<int> GetPrivateCount(string userId);
         IQueryable<Plate> GetPlatesByUserId(int pageNumber, int pageSize, string userId);
+        Task<bool> DeleteAllUserPlates(string userId);
     }
 }

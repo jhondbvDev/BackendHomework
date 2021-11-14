@@ -45,5 +45,13 @@ namespace BackendHomework.Infrastructure.Repositories
         {
             return await _entities.Where(p => string.IsNullOrEmpty(p.UserId)).CountAsync();
         }
+
+        public async Task<bool> DeleteAllUserPlates(string userId)
+        {
+            var userPlates = await _entities.Where(e => e.UserId == userId).ToListAsync();
+            _entities.RemoveRange(userPlates);
+            int rows = await _context.SaveChangesAsync();
+            return rows > 0;
+        }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using BackendHomework.Core.Entities;
 using BackendHomework.Core.Interfaces;
 using BackendHomework.Infrastructure.Data;
-using BackendHomework.Infrastructure.Pagination;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ namespace BackendHomework.Infrastructure.Repositories
 {
     public class BaseRepository<T> : IRepository<T> where T : BaseEntity
     {
-        private readonly BackendHomeworkDbContext _context;
+        protected readonly BackendHomeworkDbContext _context;
         protected DbSet<T> _entities;
         public BaseRepository(BackendHomeworkDbContext context)
         {
@@ -35,13 +34,13 @@ namespace BackendHomework.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> Delete(Guid id)
+        public async Task<bool> Delete(T entity)
         {
-            var entity = await GetById(id);
             _entities.Remove(entity);
             int rows = await _context.SaveChangesAsync();
             return rows > 0;
         }
+
 
         public async Task<bool> Update(T entity)
         {

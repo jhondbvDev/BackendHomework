@@ -14,9 +14,14 @@ namespace BackendHomework.Core.Services
         {
             _plateRepository = plateRepository;
         }
-        public Task<bool> DeletePlate(Plate plate)
+        public async Task<bool> DeletePlate(Plate plate)
         {
-            throw new NotImplementedException();
+            return await _plateRepository.Delete(plate);
+        }
+
+        public async Task<bool> DeleteAllUserPlates(string userId) 
+        {
+            return await _plateRepository.DeleteAllUserPlates(userId);
         }
 
         public async Task<int> GetCount()
@@ -24,9 +29,9 @@ namespace BackendHomework.Core.Services
             return await _plateRepository.GetCount();
         }
 
-        public Task<Plate> GetPlate(int id)
+        public async Task<Plate> GetPlate(Guid id)
         {
-            throw new NotImplementedException();
+            return await _plateRepository.GetById(id);
         }
 
         public async Task<IEnumerable<Plate>> GetPlatesByUserId(IPaginationFilter filter, string userId)
@@ -64,9 +69,9 @@ namespace BackendHomework.Core.Services
             await _plateRepository.Add(plate);
         }
 
-        public Task<bool> UpdatePlate(Plate plate)
+        public async Task<bool> UpdatePlate(Plate plate)
         {
-            throw new NotImplementedException();
+            return await _plateRepository.Update(plate);
         }
     }
 }

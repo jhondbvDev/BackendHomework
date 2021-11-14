@@ -13,6 +13,6 @@ namespace BackendHomework.Core.Interfaces
         Task<int> GetCount();
         Task Add(T entity);
         Task<bool> Update(T entity);
-        Task<bool> Delete(Guid id);
+        Task<bool> Delete(T entity);
     }
 }
