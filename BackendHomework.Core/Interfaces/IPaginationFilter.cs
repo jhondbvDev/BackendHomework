@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BackendHomework.Core.Interfaces
+﻿namespace BackendHomework.Core.Interfaces
 {
     public interface  IPaginationFilter
     {

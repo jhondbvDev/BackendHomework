@@ -1,7 +1,5 @@
 ﻿using BackendHomework.Core.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BackendHomework.Core.Interfaces
@@ -12,7 +10,7 @@ namespace BackendHomework.Core.Interfaces
         Task<int> GetPublicCount();
         Task<int> GetPrivateCount(string userId);
         Task<Plate> GetPlate(int id);
-        Task<IEnumerable<Plate>> GetPlatesByUserId(string userId);
+        Task<IEnumerable<Plate>> GetPlatesByUserId(IPaginationFilter filter, string userId);
         Task<IEnumerable<Plate>> GetPublicPlates(IPaginationFilter filter);
 
         Task InsertPlate(Plate plate);

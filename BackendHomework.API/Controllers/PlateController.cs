@@ -1,4 +1,4 @@
-﻿using AutoMapper; 
+﻿using AutoMapper;
 using BackendHomework.Core.DTOs;
 using BackendHomework.Core.Entities;
 using BackendHomework.Core.Interfaces;
@@ -45,22 +45,31 @@ namespace BackendHomework.API.Controllers
         {
             var route = Request.Path.Value;
             var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+
             var plates = await _plateService.GetPublicPlates(validFilter);
             var count = await _plateService.GetPublicCount();
+
             var platesDTO = _mapper.Map<List<PlateDTO>>(plates);
-            var pagedReponse = PaginationHelper.CreatePagedReponse<PlateDTO>(platesDTO, validFilter, count, _uriService, route);
+            var pagedReponse = PaginationHelper.CreatePagedResponse(platesDTO, validFilter, count, _uriService, route);
+
             return Ok(pagedReponse);
         }
 
         [HttpGet]
         [Route("getUserPlates")]
-        public IActionResult GetUserPlates()
+        public async Task<IActionResult> GetUserPlates([FromQuery] PaginationFilter filter)
         {
-            
+            var route = Request.Path.Value;
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
             var loggedUserId = JsonConvert.DeserializeObject<UserClaimDTO>(User.Claims.Where(c => c.Type == "UserData").FirstOrDefault().Value).Id;
-            var plates = _plateService.GetPlatesByUserId(loggedUserId);
 
-            return Ok(new Response<IEnumerable<PlateDTO>>(_mapper.Map<IEnumerable<PlateDTO>>(plates)));
+            var plates = await _plateService.GetPlatesByUserId(validFilter, loggedUserId);
+            var count = await _plateService.GetPrivateCount(loggedUserId);
+
+            var platesDTO = _mapper.Map<List<PlateDTO>>(plates);
+            var pagedReponse = PaginationHelper.CreatePagedResponse(platesDTO, validFilter, count, _uriService, route);
+
+            return Ok(pagedReponse);
         }
 
         [HttpPost]

@@ -3,8 +3,6 @@ using BackendHomework.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BackendHomework.Core.Services
@@ -31,9 +29,9 @@ namespace BackendHomework.Core.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Plate>> GetPlatesByUserId(string userId)
+        public async Task<IEnumerable<Plate>> GetPlatesByUserId(IPaginationFilter filter, string userId)
         {
-            var plates = _plateRepository.GetPlatesByUserId(userId);
+            var plates = _plateRepository.GetPlatesByUserId(filter.PageNumber, filter.PageSize, userId);
             return await plates.ToListAsync();
         }
 
@@ -56,7 +54,7 @@ namespace BackendHomework.Core.Services
 
         public async Task<IEnumerable<Plate>> GetPublicPlates(IPaginationFilter filter)
         {
-            var plates = _plateRepository.GetPublic(filter.PageNumber, filter.PageSize);
+            var plates = _plateRepository.GetPublicPlates(filter.PageNumber, filter.PageSize);
             return await plates.ToListAsync();
         }
 
