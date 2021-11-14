@@ -31,6 +31,7 @@ namespace BackendHomework.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddMvc();
             services.AddDbContext<BackendHomeworkDbContext>(options => options.UseInMemoryDatabase("BackendHomework"));
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -62,7 +63,7 @@ namespace BackendHomework.API
                 };
             });
 
-
+            services.AddAuthorization();
             //Mapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -83,13 +84,29 @@ namespace BackendHomework.API
             }
             else
             {
-                app.UseExceptionHandler("/Error");
-            }
+                app.UseExceptionHandler(appBuilder =>
+                {
+                    appBuilder.Run(async context =>
+                    {
+                        context.Response.StatusCode = 500;
 
+                        await context.Response.WriteAsync("An unexpected error happened. Try again later.");
+                    });
+                });
+            }
+            app.UseCors(
+                        option =>
+                        {
+                            option.WithOrigins("http://localhost:42268");
+                            option.AllowAnyMethod();
+                            option.AllowAnyHeader();
+                        }
+                    );
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+ 
 
             app.UseEndpoints(endpoints =>
             {

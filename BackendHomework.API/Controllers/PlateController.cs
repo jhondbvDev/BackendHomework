@@ -13,9 +13,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BackendHomework.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public class PlateController : ControllerBase
     {
 
