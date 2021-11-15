@@ -43,10 +43,8 @@ It's important to know that as this is a self-contained build, the selected arch
 
 The application is deployed in Azure using AppServices , you can access through these URL:
 
-URL API
-https://backendhomework.azurewebsites.net
-URL Documentation (Swagger):
-https://backendhomework.azurewebsites.net/swagger
+* URL API : https://backendhomework.azurewebsites.net
+* URL Documentation (Swagger): https://backendhomework.azurewebsites.net/swagger
 
 
 
