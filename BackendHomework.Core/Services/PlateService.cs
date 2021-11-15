@@ -82,7 +82,7 @@ namespace BackendHomework.Core.Services
 
         public async Task<bool> UpdatePlate(Plate plate,string userId)
         {
-            var plateOld =  await this.GetPlate(plate.Id);
+            var plateOld = await _plateRepository.GetById(plate.Id);
 
             if (plateOld != null)
             {
