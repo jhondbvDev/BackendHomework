@@ -1,8 +1,4 @@
-﻿ 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace BackendHomework.Infrastructure.Responses
 {
@@ -21,9 +17,6 @@ namespace BackendHomework.Infrastructure.Responses
             this.PageNumber = pageNumber;
             this.PageSize = pageSize;
             this.Data = data;
-            this.Message = null;
-            this.Succeeded = true;
-            this.Errors = null;
         }
     }
 }
