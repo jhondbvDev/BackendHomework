@@ -18,4 +18,6 @@
     <ProjectReference Include="..\BackendHomework.Infrastructure\BackendHomework.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="https://gitpod.io/schemas/gitpod-schema.json" /></VisualStudio></ProjectExtensions>
+
 </Project>
