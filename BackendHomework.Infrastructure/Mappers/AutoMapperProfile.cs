@@ -12,7 +12,11 @@ namespace BackendHomework.Infrastructure.Mappers
         public AutoMapperProfile()
         {
             CreateMap<Plate, PlateDTO>().ReverseMap();
+            CreateMap<Plate, EditPlateDTO>().ReverseMap();
+            CreateMap<Plate, CreatePlateDTO>().ReverseMap();
+
+
         }
-        
+
     }
 }

@@ -3,7 +3,7 @@ using BackendHomework.Core.Interfaces;
 using BackendHomework.Core.Services;
 using BackendHomework.Infrastructure.Data;
 using BackendHomework.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -76,6 +76,12 @@ namespace BackendHomework.API
             });
             //Mapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            //Validator
+            services.AddMvc().AddFluentValidation(options =>
+           {
+               options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+           });
 
             AddSwagger(services);
 

@@ -15,7 +15,7 @@ namespace BackendHomework.Core.Interfaces
         Task<IEnumerable<Plate>> GetPublicPlates(IPaginationFilter filter);
 
         Task InsertPlate(Plate plate);
-        Task<bool> UpdatePlate(Plate plate);
+        Task<bool> UpdatePlate(Plate plate,string userId);
         Task<bool> DeletePlate(Plate plate);
         Task<bool> DeleteAllUserPlates(string userId);
     }

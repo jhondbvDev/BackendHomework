@@ -118,34 +118,20 @@ namespace BackendHomework.API.Controllers
             {
                 //Getting values from jwt to link plate to the current user 
                 var loggedUserId = JsonConvert.DeserializeObject<UserClaimDTO>(User.Claims.Where(c => c.Type == "UserData").FirstOrDefault().Value).Id;
-
+                
                 if (loggedUserId != null)
                 {
-                    var plate = await _plateService.GetPlate(dto.PlateId);
-
-                    if(plate != null) 
-                    {
-                        if (plate.UserId == loggedUserId)
-                        {
-                            plate.Price = dto.Price;
-                            await _plateService.UpdatePlate(plate);
-
-                            return Ok(new Response<string>("The plate price has been update successfully"));
-                        }
-                        else 
-                        {
-                            return BadRequest(new Response<string>("The plate you are trying to edit does not belong to you, please try with another plate"));
-                        }
-                    }
-                    else 
-                    {
-                        return BadRequest(new Response<string>("The plate you are trying to edit does not exist, please try with another plate"));
-                    }
+                    Plate plate = _mapper.Map<Plate>(dto);
+                    await _plateService.UpdatePlate(plate, loggedUserId);
+                    
                 }
                 else
                 {
                     return BadRequest(new Response<string>("There is no user actually logged into the server, please try again"));
                 }
+
+                return Ok(new Response<string>("the plate has been updated successfully "));
+              
             }
             catch (Exception ex)
             {
@@ -155,7 +141,7 @@ namespace BackendHomework.API.Controllers
 
         [HttpDelete]
         [Route("deletePlate")]
-        public async Task<IActionResult> DeletePlate(DeletePlateDTO dto)
+        public async Task<IActionResult> DeletePlate(Guid id)
         {
             try
             {
@@ -164,7 +150,7 @@ namespace BackendHomework.API.Controllers
 
                 if (loggedUserId != null)
                 {
-                    var plate = await _plateService.GetPlate(dto.PlateId);
+                    var plate = await _plateService.GetPlate(id);
 
                     if (plate != null)
                     {

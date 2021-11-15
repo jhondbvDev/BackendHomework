@@ -1,6 +1,9 @@
-﻿using BackendHomework.Core.Entities;
+﻿using BackendHomework.Core.DTOs;
+using BackendHomework.Core.Entities;
+using BackendHomework.Core.Exceptions;
 using BackendHomework.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -46,10 +49,6 @@ namespace BackendHomework.Core.Services
             return await count;
         }
 
-        public Task<int> GetPrivateCount()
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<int> GetPublicCount()
         {
@@ -69,9 +68,26 @@ namespace BackendHomework.Core.Services
             await _plateRepository.Add(plate);
         }
 
-        public async Task<bool> UpdatePlate(Plate plate)
+        public async Task<bool> UpdatePlate(Plate plate,string userId)
         {
-            return await _plateRepository.Update(plate);
+            var plateOld =  this.GetPlate(plate.Id).Result;
+            if (plateOld != null)
+            {
+                plateOld.Description = plate.Description;
+                plateOld.Price = plate.Price;
+                plateOld.Name = plate.Name;
+                plateOld.Type = plate.Type;
+                if (plate.UserId != userId)
+                {
+                    throw new BusinessException("The plate you are trying to edit does not belong to you, please try with another plate");
+                }
+                return await _plateRepository.Update(plate);
+            }
+            else
+            {
+                throw new BusinessException("The plate you are trying to edit does not exist, please try with another plate");
+            }
+ 
         }
     }
 }
