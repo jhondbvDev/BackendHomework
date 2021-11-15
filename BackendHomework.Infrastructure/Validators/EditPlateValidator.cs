@@ -1,12 +1,9 @@
 ﻿using BackendHomework.Core.DTOs;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BackendHomework.Infrastructure.Validators
 {
-    public class EditPlateValidator : AbstractValidator<EditPlateDTO>
+    public class EditPlateValidator : AbstractValidator<PlateDTO>
     {
         public EditPlateValidator()
         {
@@ -21,7 +18,6 @@ namespace BackendHomework.Infrastructure.Validators
               .NotNull();
             RuleFor(p => p.Description)
            .Length(0, 200);
-
         }
     }
 }

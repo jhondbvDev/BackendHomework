@@ -1,8 +1,5 @@
 ﻿using BackendHomework.Core.DTOs;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BackendHomework.Infrastructure.Validators
 {
@@ -19,8 +16,6 @@ namespace BackendHomework.Infrastructure.Validators
               .NotNull();
             RuleFor(p => p.Description)
            .Length(0, 200);
-
-           
         }
     }
 }

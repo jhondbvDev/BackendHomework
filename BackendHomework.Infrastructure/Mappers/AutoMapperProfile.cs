@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using BackendHomework.Core.DTOs;
 using BackendHomework.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BackendHomework.Infrastructure.Mappers
 {
@@ -12,11 +9,7 @@ namespace BackendHomework.Infrastructure.Mappers
         public AutoMapperProfile()
         {
             CreateMap<Plate, PlateDTO>().ReverseMap();
-            CreateMap<Plate, EditPlateDTO>().ReverseMap();
             CreateMap<Plate, CreatePlateDTO>().ReverseMap();
-
-
         }
-
     }
 }

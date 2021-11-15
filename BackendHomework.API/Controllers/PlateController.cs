@@ -84,16 +84,9 @@ namespace BackendHomework.API.Controllers
 
                 if (loggedUser != null)
                 {
-                    var plate = new Plate 
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = dto.Name,
-                        Description = dto.Description,
-                        Price = dto.Price,
-                        Type = dto.Type,
-                        User = loggedUser,
-                        UserId = loggedUser.Id
-                    };
+                    var plate = _mapper.Map<Plate>(dto);
+                    plate.UserId = loggedUserId;
+                    plate.User = loggedUser;
 
                     await _plateService.InsertPlate(plate);
 
@@ -112,23 +105,20 @@ namespace BackendHomework.API.Controllers
 
         [HttpPut]
         [Route("editPlatePrice")]
-        public async Task<IActionResult> EditPlatePrice(EditPlateDTO dto)
+        public async Task<IActionResult> EditPlate(PlateDTO dto)
         {
             try
             {
                 //Getting values from jwt to link plate to the current user 
                 var loggedUserId = JsonConvert.DeserializeObject<UserClaimDTO>(User.Claims.Where(c => c.Type == "UserData").FirstOrDefault().Value).Id;
-                
-                if (loggedUserId != null)
-                {
-                    Plate plate = _mapper.Map<Plate>(dto);
-                    await _plateService.UpdatePlate(plate, loggedUserId);
-                    
-                }
-                else
+
+                if (loggedUserId == null)
                 {
                     return BadRequest(new Response<string>("There is no user actually logged into the server, please try again"));
                 }
+
+                Plate plate = _mapper.Map<Plate>(dto);
+                await _plateService.UpdatePlate(plate, loggedUserId);
 
                 return Ok(new Response<string>("the plate has been updated successfully "));
               
@@ -148,32 +138,14 @@ namespace BackendHomework.API.Controllers
                 //Getting values from jwt to link plate to the current user 
                 var loggedUserId = JsonConvert.DeserializeObject<UserClaimDTO>(User.Claims.Where(c => c.Type == "UserData").FirstOrDefault().Value).Id;
 
-                if (loggedUserId != null)
-                {
-                    var plate = await _plateService.GetPlate(id);
-
-                    if (plate != null)
-                    {
-                        if (plate.UserId == loggedUserId)
-                        {
-                            await _plateService.DeletePlate(plate);
-
-                            return Ok(new Response<string>("The plate has been deleted successfully"));
-                        }
-                        else
-                        {
-                            return BadRequest(new Response<string>("The plate you are trying to delete does not belong to you, please try with another plate"));
-                        }
-                    }
-                    else
-                    {
-                        return BadRequest(new Response<string>("The plate you are trying to delete does not exist, please try with another plate"));
-                    }
-                }
-                else
+                if (loggedUserId == null)
                 {
                     return BadRequest(new Response<string>("There is no user actually logged into the server, please try again"));
                 }
+
+                await _plateService.DeletePlate(id, loggedUserId);
+
+                return Ok(new Response<string>("The plate has been deleted successfully"));
             }
             catch (Exception ex)
             {

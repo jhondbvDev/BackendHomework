@@ -16,7 +16,7 @@ namespace BackendHomework.Core.Interfaces
 
         Task InsertPlate(Plate plate);
         Task<bool> UpdatePlate(Plate plate,string userId);
-        Task<bool> DeletePlate(Plate plate);
+        Task<bool> DeletePlate(Guid plateId, string userId);
         Task<bool> DeleteAllUserPlates(string userId);
     }
 }
