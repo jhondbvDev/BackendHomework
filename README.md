@@ -21,7 +21,7 @@ As a quick note, this project is running on an InMemory database which improve t
 
 In this [repository](https://github.com/jhondbvDev/BackendHomework) you will find a folder called "Other_Files" that stores the self-contained API build files, within these files there is an executable file called **BackendHomework.API.exe**, this file will start a local server. After this, you should be able to access the project from your browser and start testing directly using http://localhost:5000/swagger.
 
-Is important to know that as this is a self-contained build, the selected architecture for it was win-64 so it will not work on other OS platforms, if you are on a win-64 system them it should work without issue and you don't need to install any .NET dependency on your own system.
+It's important to know that as this is a self-contained build, the selected architecture for it was win-64 so it will not work on other OS platforms, if you are on a win-64 system them it should work without issue and you don't need to install any .NET dependency on your own system.
 
 
 
