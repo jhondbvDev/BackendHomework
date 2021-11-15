@@ -39,5 +39,14 @@ In this [repository](https://github.com/jhondbvDev/BackendHomework) you will fin
 
 It's important to know that as this is a self-contained build, the selected architecture for it was win-64 so it will not work on other OS platforms, if you are on a win-64 system them it should work without issue and you don't need to install any .NET dependency on your own system.
 
+### Run from Azure
+
+The application is deployed in Azure using AppServices , you can access through these URL:
+
+URL API
+https://backendhomework.azurewebsites.net
+URL Documentation (Swagger):
+https://backendhomework.azurewebsites.net/swagger
+
 
 
