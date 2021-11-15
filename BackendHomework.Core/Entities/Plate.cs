@@ -1,6 +1,6 @@
 ﻿namespace BackendHomework.Core.Entities
 {
-    public class Plate:BaseEntity
+    public class Plate : BaseEntity
     {
         public string Name { get; set; }
         public string Description { get; set; }

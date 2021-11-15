@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-using static BackendHomework.API.Extensions.HostExtensions;
+using static BackendHomework.Infrastructure.Extensions.HostExtensions;
 
 namespace BackendHomework.API
 {

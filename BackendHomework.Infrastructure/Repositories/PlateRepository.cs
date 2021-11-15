@@ -23,7 +23,7 @@ namespace BackendHomework.Infrastructure.Repositories
             return _entities
                 .Where(e => e.User.Id == userId)
                 .Skip((pageFilter.PageNumber - 1) * pageFilter.PageSize)
-                .Take(pageFilter.PageSize).AsQueryable();
+                .Take(pageFilter.PageSize);
         }
 
         public async Task<int> GetPrivateCount(string userId)
@@ -38,7 +38,7 @@ namespace BackendHomework.Infrastructure.Repositories
             return _entities
                 .Where(p => string.IsNullOrEmpty(p.UserId))
                 .Skip((pageFilter.PageNumber - 1) * pageFilter.PageSize)
-                .Take(pageFilter.PageSize).AsQueryable();
+                .Take(pageFilter.PageSize);
         }
 
         public async Task<int> GetPublicCount()

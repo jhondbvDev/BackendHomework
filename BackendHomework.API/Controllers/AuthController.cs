@@ -71,7 +71,7 @@ namespace BackendHomework.API.Controllers
             }
             catch(Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest(new Response<string>(ex.Message));
             }
         }
 
@@ -105,7 +105,7 @@ namespace BackendHomework.API.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new Response<Exception>(ex));
+                return BadRequest(new Response<string>(ex.Message));
             }
         }
 
