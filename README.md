@@ -2,7 +2,7 @@
 
 This project consists on an API for restaurant plates of different types in which the user would be able to create, edit, view and delete his own plates, also would be able to access a preloaded database of public plates (which he can not affect with any of the previous operations, except for viewing them). 
 
-The project supports OpenAPI specification so the user would be able to access API an test it directly from Swagger.
+The project supports OpenAPI specification so the user would be able to access the API and test it directly from Swagger.
 
 ![SwaggerEnpoints](https://github.com/jhondbvDev/BackendHomework/blob/master/README_Images/SwaggerEnpoints.png)
 
