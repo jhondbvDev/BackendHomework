@@ -6,6 +6,20 @@ The project supports OpenAPI specification so the user would be able to access t
 
 ![SwaggerEnpoints](https://github.com/jhondbvDev/BackendHomework/blob/master/README_Images/SwaggerEnpoints.png)
 
+## Used technologies and patterns
+
+* ASP.NET Core 3.1
+* Swagger (OpenAPI)
+* Entity Framework Core (ORM)
+* Code First Design (EF Core)
+* InMemory Storage (EF Core)
+* Clean Architecture
+* Validators
+* Filters
+* DTOs
+* Repository Pattern
+* Services
+
 ## Steps to run the project
 
 As a quick note, this project is running on an InMemory database which improve the testing efforts speed since there is no need for a database engine to test this code. This implies that the data used on each execution of the project (if the API is restarted or shut down) will be erased, except for the public plates data which is seeded during the API start cicle. 
